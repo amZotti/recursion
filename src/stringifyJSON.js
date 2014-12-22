@@ -4,5 +4,36 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  // your code goes here
-};
+  var stringifyJSONarray = function(arr) {
+    if (arr.length <= 0)
+      return "]";
+    var currentElement = ", " + arr[0];
+    var result =  stringifyJSONarray(arr.slice(1));
+    return currentElement + result;
+  };
+
+  var stringifyJSONobject = function(obj) {
+    return null;
+  };
+
+  var stringifyJSONnumber = function(number) {
+    return null
+  //  if (number == 0)
+  //    return "";
+  //  var currentElement = String(num % 10);
+  //  var result = stringifyJSONnumber(Math.floor(num / 10));
+
+  };
+
+
+
+  if (obj instanceof Array) {
+    return "[" + stringifyJSONarray(obj).slice(2);
+  }
+  else if(typeof(obj) === "number") {
+    return stringifyJSONnumber(obj);
+  }
+  else if (obj instanceof Object) {
+    return stringifyJSONobject(obj);
+  }
+}
