@@ -16,13 +16,12 @@ var stringifyJSON = function(obj) {
     return null;
   };
 
-  var stringifyJSONnumber = function(number) {
-    return null
-  //  if (number == 0)
-  //    return "";
-  //  var currentElement = String(num % 10);
-  //  var result = stringifyJSONnumber(Math.floor(num / 10));
-
+  var stringifyJSONnumber = function(num) {
+    if (num == 0)
+      return "";
+    var currentElement = String(num % 10);
+    var result = stringifyJSONnumber(Math.floor(num / 10));
+    return currentElement + result;
   };
 
 
