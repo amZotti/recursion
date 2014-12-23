@@ -7,7 +7,7 @@ var stringifyJSON = function(obj) {
   var stringifyJSONarray = function(arr) {
     if (arr.length <= 0)
       return "]";
-    var currentElement = ", " + arr[0];
+    var currentElement = "," + arr[0];
     var result =  stringifyJSONarray(arr.slice(1));
     return currentElement + result;
   };
@@ -24,15 +24,28 @@ var stringifyJSON = function(obj) {
     return currentElement + result;
   };
 
-
-
-  if (obj instanceof Array) {
-    return "[" + stringifyJSONarray(obj).slice(2);
+  if (obj instanceof Array && obj.length === 0) {
+    return "[]";
+  }
+  else if (obj instanceof Array && obj.length !== 0) {
+    return "[" + stringifyJSONarray(obj).slice(1);
   }
   else if(typeof(obj) === "number") {
     return stringifyJSONnumber(obj);
   }
   else if (obj instanceof Object) {
     return stringifyJSONobject(obj);
+  }
+  else if (obj === null) {
+    return "null";
+  }
+  else if (obj === true) {
+    return "true";
+  }
+  else if (obj === false) {
+    return "false";
+  }
+  else if (typeof obj === "string") {
+    return '"' + obj + '"';
   }
 }
