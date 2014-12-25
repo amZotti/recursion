@@ -5,27 +5,46 @@
 
 var stringifyJSON = function(obj) {
   var stringifyJSONarray = function(arr) {
-    if (arr.length <= 0)
-      return "]";
-    var currentElement = "," + arr[0];
-    var result =  stringifyJSONarray(arr.slice(1));
-    return currentElement + result;
+    var result = [];
+    for (var i = 0;i < arr.length;i++) {
+      result.push(stringifyJSON(arr[i]));
+    }
+    return arrayToString(result);
   };
 
+  var arrayToString = function(arr) {
+    var str = arr.join(",");
+    var size = str.length;
+    return "[" + str.substring(0, size) + "]";
+  }
+
+  var objectToString = function(arr) {
+    console.log(arr);
+    var str = arr.join(",");
+    console.log(str);
+    var size = str.length;
+    return "{" + str.substring(0, size) + "}";
+  }
+
   var stringifyJSONobject = function(obj) {
-    return null;
+    var result = [];
+    for (var key in obj) {
+      if (!(typeof obj[key] === "function" || obj[key] === undefined))
+        result.push(stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
+
+    }
+    return objectToString(result);
   };
 
   var stringifyJSONnumber = function(num) {
-    if (num == 0)
-      return "";
-    var currentElement = String(num % 10);
-    var result = stringifyJSONnumber(Math.floor(num / 10));
-    return currentElement + result;
+    return String(num);
   };
 
   if (obj instanceof Array && obj.length === 0) {
     return "[]";
+  }
+  else if (typeof obj === "function" || obj === undefined) {
+    return undefined;
   }
   else if (obj instanceof Array && obj.length !== 0) {
     return "[" + stringifyJSONarray(obj).slice(1);
