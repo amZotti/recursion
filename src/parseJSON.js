@@ -3,5 +3,32 @@
 
 // but you're not, so you'll write it from scratch:
 var parseJSON = function(json) {
-  // your code goes here
-};
+  var delimiterStack = [];
+  var result = [];
+  var parseJSONhelper = function(json) {
+    var valueStack = [];
+    for (var i = 0;i < json.length;i++) {
+      if (json[i] === "[")
+        delimiterStack.push("[");
+      else if (json[i] === "]") {
+        delimiterStack.pop();
+        copyStackOver(valueStack);
+        valueStack = [];
+      }
+      else if (json[i] === ",");
+        //ignore
+      else {
+        valueStack.push(json[i]);
+      }
+    };
+  };
+
+  var copyStackOver = function(valueStack) {
+    for (var i = 0;i < valueStack.length;i++) {
+      result.push(valueStack[i]);
+    }
+  };
+
+  parseJSONhelper(json);
+  return result;
+}
