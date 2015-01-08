@@ -2,33 +2,49 @@
 // var parseJSON = JSON.parse;
 
 // but you're not, so you'll write it from scratch:
-var parseJSON = function(json) {
-  var delimiterStack = [];
-  var result = [];
-  var parseJSONhelper = function(json) {
-    var valueStack = [];
-    for (var i = 0;i < json.length;i++) {
-      if (json[i] === "[")
-        delimiterStack.push("[");
-      else if (json[i] === "]") {
-        delimiterStack.pop();
-        copyStackOver(valueStack);
-        valueStack = [];
-      }
-      else if (json[i] === ",");
-        //ignore
-      else {
-        valueStack.push(json[i]);
-      }
-    };
-  };
-
-  var copyStackOver = function(valueStack) {
-    for (var i = 0;i < valueStack.length;i++) {
-      result.push(valueStack[i]);
+var findIndexOfNextThing = function(json) {
+  var obj = {};
+  for (var i = 0;i < json.length;i++) {
+    var currentValue = json[i];
+    switch(true) {
+      case(currentValue == "]"):
+        obj['type'] = "end array";
+        break;
+      case(currentValue == "["):
+        obj['type'] = "new array";
+        break;
+      case(/[a-z]/i.test(currentValue)):
+        obj['type'] = "content"
+        break;
+      case(/[0-9]/.test(currentValue)):
+        if (isString(json, i))
+          obj['value'] = String(currentValue);
+        else
+          obj['value'] = parseInt(currentValue);
+        obj['type'] = "content"
+        break;
     }
-  };
+    obj['value'] = obj['value'] || currentValue;
+    obj['index'] = i;
+    if (obj['type'])
+      return obj;
+  }
+};
 
-  parseJSONhelper(json);
-  return result;
+var isString = function(json, i) {
+  return json[i-1] === "'" || json[i-1] === '"' || 
+    json[i+1] === "'" || json[i+1] === '"';
+};
+
+var parseJSON = function(json) {
+  var currentChar = json.charAt(0);
+  if (currentChar === "[")
+    return [parseJSON(json.substring(1))];
+  if (currentChar.match(/[a-z0-9]/i))
+    var result = parseJSON(json.substring(2));
+  return currentChar + ", " + result;
 }
+
+console.log(findIndexOfNextThing(']'));
+
+//console.log(parseJSON("[1,2,3]"));
