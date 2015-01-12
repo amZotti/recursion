@@ -2,49 +2,55 @@
 // var parseJSON = JSON.parse;
 
 // but you're not, so you'll write it from scratch:
-var findIndexOfNextThing = function(json) {
-  var obj = {};
-  for (var i = 0;i < json.length;i++) {
-    var currentValue = json[i];
-    switch(true) {
-      case(currentValue == "]"):
-        obj['type'] = "end array";
-        break;
-      case(currentValue == "["):
-        obj['type'] = "new array";
-        break;
-      case(/[a-z]/i.test(currentValue)):
-        obj['type'] = "content"
-        break;
-      case(/[0-9]/.test(currentValue)):
-        if (isString(json, i))
-          obj['value'] = String(currentValue);
-        else
-          obj['value'] = parseInt(currentValue);
-        obj['type'] = "content"
-        break;
-    }
-    obj['value'] = obj['value'] || currentValue;
-    obj['index'] = i;
-    if (obj['type'])
-      return obj;
-  }
-};
 
-var isString = function(json, i) {
-  return json[i-1] === "'" || json[i-1] === '"' || 
-    json[i+1] === "'" || json[i+1] === '"';
-};
-
-var parseJSON = function(json) {
-  var currentChar = json.charAt(0);
-  if (currentChar === "[")
-    return [parseJSON(json.substring(1))];
-  if (currentChar.match(/[a-z0-9]/i))
-    var result = parseJSON(json.substring(2));
-  return currentChar + ", " + result;
+var removeWhiteSpace = function() {
+  while (currentValue === " ")
+    nextValue();
 }
 
-console.log(findIndexOfNextThing(']'));
+var parseArray = function() {
+  //incomplete
+}
 
-//console.log(parseJSON("[1,2,3]"));
+var parseObject = function() {
+  //incomplete
+}
+
+var parseString = function() {
+  //incomplete
+}
+
+var parseContent = function() {
+  //incomplete
+}
+
+var nextValue = function() {
+  currentValue = source.charAt(index);
+  index++;
+  if (currentValue === "")
+    console.log("Nothing left to process");
+}
+
+var processNextValue = function() {
+  removeWhiteSpace();
+  switch (currentValue) {
+    case "[":
+      return parseArray();
+    case "{":
+      return parseObject();
+    case '"':
+      return parseString();
+    default:
+      return parseContent();
+  }
+}
+
+var parseJSON = function(json) {
+  source = json;
+  index = 0;
+  currentValue = "";
+  nextValue();
+  processNextValue();
+}
+
+console.log(parseJSON("[1,2,3,4]"));
