@@ -3,35 +3,51 @@
 
 // but you're not, so you'll write it from scratch:
 
-var removeWhiteSpace = function() {
-  while (currentValue === " ")
-    nextValue();
-}
-
-var parseArray = function() {
-  //incomplete
-}
-
-var parseObject = function() {
-  //incomplete
-}
-
-var parseString = function() {
-  //incomplete
-}
-
-var parseContent = function() {
-  //incomplete
-}
-
-var nextValue = function() {
+function nextValue() {
   currentValue = source.charAt(index);
   index++;
   if (currentValue === "")
     console.log("Nothing left to process");
 }
 
-var processNextValue = function() {
+function removeWhiteSpace() {
+  while (currentValue === " ")
+    nextValue();
+}
+
+function parseArray() {
+  var arr = [];
+  nextValue();
+  while (currentValue !== "]" && currentValue !== "") {
+    arr.push(processNextValue(currentValue));
+    nextValue();
+    findNextArrayValue();
+  }
+  return arr;
+}
+
+function findNextArrayValue() {
+  removeWhiteSpace();
+  if (currentValue === ",") {
+    nextValue();
+  }
+  removeWhiteSpace();
+}
+
+function parseObject() {
+  //incomplete
+}
+
+function parseString() {
+  //incomplete
+}
+
+function parseContent() {
+  //incomplete
+  return currentValue;
+}
+
+function processNextValue() {
   removeWhiteSpace();
   switch (currentValue) {
     case "[":
@@ -45,12 +61,12 @@ var processNextValue = function() {
   }
 }
 
-var parseJSON = function(json) {
+function parseJSON(json) {
   source = json;
   index = 0;
   currentValue = "";
   nextValue();
-  processNextValue();
+  return processNextValue();
 }
 
 console.log(parseJSON("[1,2,3,4]"));
