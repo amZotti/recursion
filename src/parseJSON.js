@@ -8,6 +8,7 @@ function nextValue() {
   index++;
   if (currentValue === "")
     console.log("Nothing left to process");
+  return undefined;
 }
 
 function removeWhiteSpace() {
@@ -21,8 +22,11 @@ function parseArray() {
   while (currentValue !== "]" && currentValue !== "") {
     arr.push(processNextValue(currentValue));
     nextValue();
+    if (endOfArray)
+      break;
     findNextArrayValue();
   }
+  endOfArray = false;
   return arr;
 }
 
@@ -44,6 +48,10 @@ function parseNumber() {
     str += currentValue;
     nextValue();
   }
+  if (currentValue === "]")
+    endOfArray = true;
+  if (currentValue === "}")
+    endOfObject = true;
   return parseInt(str);
 }
 
@@ -74,6 +82,8 @@ function processNextValue() {
 }
 
 function parseJSON(json) {
+  endOfArray = false;
+  endOfObject = false;
   source = json;
   index = 0;
   currentValue = "";
@@ -81,4 +91,4 @@ function parseJSON(json) {
   return processNextValue();
 }
 
-console.log(parseJSON('[111,3231323,     2,  "alot!", "323213" ]'));
+console.log(parseJSON('[111,3231323,     [], [], [],[1, 2, 3],  "alot!", "323213" ]'));
