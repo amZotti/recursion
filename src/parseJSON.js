@@ -38,17 +38,6 @@ function parseObject() {
   //incomplete
 }
 
-function parseString() {
-  //incomplete
-}
-
-function parseContent() {
-  if (/[0-9]/.test(currentValue))
-    return parseNumber();
-  else
-    return parseWord();
-}
-
 function parseNumber() {
   var str = "";
   while (/[0-9]/.test(currentValue)) {
@@ -58,17 +47,29 @@ function parseNumber() {
   return parseInt(str);
 }
 
+function parseString() {
+  var str = "";
+  nextValue();
+  while (!/['"]/.test(currentValue)) {
+    str += currentValue;
+    nextValue();
+  }
+  return str;
+}
+
 function processNextValue() {
   removeWhiteSpace();
-  switch (currentValue) {
-    case "[":
+  switch (true) {
+    case /\[/.test(currentValue):
       return parseArray();
-    case "{":
+    case /{/.test(currentValue):
       return parseObject();
-    case '"':
+    case /['"]/.test(currentValue):
       return parseString();
+    case /[0-9]/.test(currentValue):
+      return parseNumber();
     default:
-      return parseContent();
+      return undefined;
   }
 }
 
@@ -80,4 +81,4 @@ function parseJSON(json) {
   return processNextValue();
 }
 
-console.log(parseJSON("[111,2,3,4]"));
+console.log(parseJSON('[111,3231323,     2,  "alot!", "323213" ]'));
