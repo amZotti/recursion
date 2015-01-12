@@ -47,7 +47,6 @@ function findNextObjectValue() {
 
 function parseObject() {
   var obj = {}, key, value;
-  debugger;
   nextValue();
   while (currentValue !== "}" && currentValue !== "") {
     findNextObjectValue();
@@ -66,7 +65,7 @@ function parseObject() {
 
 function parseNumber() {
   var str = "";
-  while (/[0-9]/.test(currentValue)) {
+  while (/[0-9\.-]/.test(currentValue)) {
     str += currentValue;
     nextValue();
   }
@@ -74,18 +73,37 @@ function parseNumber() {
     endOfArray = true;
   if (currentValue === "}")
     endOfObject = true;
-  return parseInt(str);
+    return parseInt(str);
 }
 
 function parseString() {
   var str = "";
   nextValue();
   while (!/['"]/.test(currentValue)) {
-    console.log(str)
       str += currentValue;
   nextValue();
 }
 return str;
+}
+
+function parseContent() {
+  switch (currentValue) {
+    case ("u"):
+      index += 9;
+      return undefined;
+    case ("n"):
+      index += 4;
+      return null;
+    case ("t"):
+      index += 4;
+      return true;
+    case ("f"):
+      index += 5;
+      return false;
+    default:
+      //Syntax error
+      return undefined;
+  }
 }
 
 function processNextValue() {
@@ -97,10 +115,10 @@ function processNextValue() {
       return parseObject();
       case /['"]/.test(currentValue):
       return parseString();
-      case /[0-9]/.test(currentValue):
+      case /[0-9\.-]/.test(currentValue):
       return parseNumber();
       default:
-      return undefined;
+      return parseContent();
     }
   }
 
@@ -114,4 +132,14 @@ function processNextValue() {
     return processNextValue();
   }
 
-//  console.log(parseJSON('{"a": [1, [[{"hey": 24214]]]}'));
+
+function test(value) {
+console.log("parseJSON (mine)");
+console.log(parseJSON(value));
+
+console.log("JSON.parse (builtin)");
+console.log(JSON.parse(value));
+
+console.log(_.isEqual(parseJSON(value), JSON.parse(value)));
+
+}
