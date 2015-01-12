@@ -91,4 +91,4 @@ function parseJSON(json) {
   return processNextValue();
 }
 
-console.log(parseJSON('[111,3231323,     [], [], [],[1, 2, 3],  "alot!", "323213" ]'));
+console.log(parseJSON('[111,3231323,     [], [], [],[1, 2, 3],  ["alot!"], "323213" ]'));
