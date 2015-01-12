@@ -47,19 +47,20 @@ function findNextObjectValue() {
 
 function parseObject() {
   var obj = {}, key, value;
+  debugger;
   nextValue();
-  while (currentValue !== "}" || currentValue !== "") {
+  while (currentValue !== "}" && currentValue !== "") {
     findNextObjectValue();
     key = parseString(currentValue);
     nextValue();
     findNextObjectValue();
     value = processNextValue(currentValue);
-    console.log(value)
-      obj[key] = value;
+    obj[key] = value;
     if (endOfObject)
       break;
     nextValue();
   }
+
   return obj;
 }
 
@@ -113,4 +114,4 @@ function processNextValue() {
     return processNextValue();
   }
 
-  console.log(parseJSON('{"a": [1]'));
+//  console.log(parseJSON('{"a": [1, [[{"hey": 24214]]]}'));
