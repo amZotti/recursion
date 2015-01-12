@@ -38,8 +38,29 @@ function findNextArrayValue() {
   removeWhiteSpace();
 }
 
+function findNextObjectValue() {
+  removeWhiteSpace();
+  if (currentValue === ":" || currentValue === ",")
+    nextValue();
+  removeWhiteSpace();
+}
+
 function parseObject() {
-  //incomplete
+  var obj = {}, key, value;
+  nextValue();
+  while (currentValue !== "}" || currentValue !== "") {
+    findNextObjectValue();
+    key = parseString(currentValue);
+    nextValue();
+    findNextObjectValue();
+    value = processNextValue(currentValue);
+    console.log(value)
+      obj[key] = value;
+    if (endOfObject)
+      break;
+    nextValue();
+  }
+  return obj;
 }
 
 function parseNumber() {
@@ -59,10 +80,11 @@ function parseString() {
   var str = "";
   nextValue();
   while (!/['"]/.test(currentValue)) {
-    str += currentValue;
-    nextValue();
-  }
-  return str;
+    console.log(str)
+      str += currentValue;
+  nextValue();
+}
+return str;
 }
 
 function processNextValue() {
@@ -72,23 +94,23 @@ function processNextValue() {
       return parseArray();
     case /{/.test(currentValue):
       return parseObject();
-    case /['"]/.test(currentValue):
+      case /['"]/.test(currentValue):
       return parseString();
-    case /[0-9]/.test(currentValue):
+      case /[0-9]/.test(currentValue):
       return parseNumber();
-    default:
+      default:
       return undefined;
+    }
   }
-}
 
-function parseJSON(json) {
-  endOfArray = false;
-  endOfObject = false;
-  source = json;
-  index = 0;
-  currentValue = "";
-  nextValue();
-  return processNextValue();
-}
+  function parseJSON(json) {
+    endOfArray = false;
+    endOfObject = false;
+    source = json;
+    index = 0;
+    currentValue = "";
+    nextValue();
+    return processNextValue();
+  }
 
-console.log(parseJSON('[111,3231323,     [], [], [],[1, 2, 3],  ["alot!"], "323213" ]'));
+  console.log(parseJSON('{"a": [1]'));
