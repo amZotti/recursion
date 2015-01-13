@@ -60,7 +60,7 @@ parseableStrings = [
   '["and you can\'t escape thi\s"]',
 
   // everything all at once
-  '{"CoreletAPIVersion":2,"CoreletType":"standalone",' +
+  Str = '{"CoreletAPIVersion":2,"CoreletType":"standalone",' +
     '"documentation":"A corelet that provides the capability to upload' +
     ' a folderâ€™s contents into a userâ€™s locker.","functions":[' +
     '{"documentation":"Displays a dialog box that allows user to ' +
@@ -88,13 +88,13 @@ parseableStrings = [
     '"callback","required":true,"type":"callback"}]}],' +
     '"name":"LockerUploader","version":{"major":0,' +
     '"micro":1,"minor":0},"versionString":"0.0.1"}',
-  '{ "firstName": "John", "lastName" : "Smith", "age" : ' +
+  Str2 = '{ "firstName": "John", "lastName" : "Smith", "age" : ' +
     '25, "address" : { "streetAddress": "21 2nd Street", ' +
     '"city" : "New York", "state" : "NY", "postalCode" : ' +
     ' "10021" }, "phoneNumber": [ { "type" : "home", ' +
     '"number": "212 555-1234" }, { "type" : "fax", ' +
     '"number": "646 555-4567" } ] }',
-  '{\r\n' +
+  Str3 = '{\r\n' +
     '          "glossary": {\n' +
     '              "title": "example glossary",\n\r' +
     '      \t\t"GlossDiv": {\r\n' +

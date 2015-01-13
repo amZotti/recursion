@@ -7,7 +7,6 @@ function nextValue() {
   currentValue = source.charAt(index);
   index++;
   if (currentValue === "")
-    console.log("Nothing left to process");
   return undefined;
 }
 
@@ -40,6 +39,8 @@ function findNextArrayValue() {
 
 function findNextObjectValue() {
   removeWhiteSpace();
+  if (currentValue === "}" || currentValue === "")
+    endOfObject = true;
   if (currentValue === ":" || currentValue === ",")
     nextValue();
   removeWhiteSpace();
@@ -50,16 +51,19 @@ function parseObject() {
   nextValue();
   while (currentValue !== "}" && currentValue !== "") {
     findNextObjectValue();
+    if (!endOfObject) {
     key = parseString(currentValue);
     nextValue();
     findNextObjectValue();
     value = processNextValue(currentValue);
     obj[key] = value;
-    if (endOfObject)
-      break;
     nextValue();
+    }
+    else  {
+      endOfObject = false;
+      break;
+    }
   }
-
   return obj;
 }
 
