@@ -73,17 +73,50 @@ function parseNumber() {
     endOfArray = true;
   if (currentValue === "}")
     endOfObject = true;
+  if (/\./.test(str))
+    return parseFloat(str);
+  else
     return parseInt(str);
 }
+
 
 function parseString() {
   var str = "";
   nextValue();
-  while (!/['"]/.test(currentValue)) {
+  while (!/["]/.test(currentValue)) {
+    if (currentValue === "\\") {
+      nextValue();
+      str += parseSpecialCharacter();
+    }
+    else {
       str += currentValue;
-  nextValue();
+    }
+    nextValue();
+  }
+  return str;
 }
-return str;
+
+function parseSpecialCharacter() {
+  switch(currentValue) {
+    case ("t"):
+      return "\t";
+    case ("n"):
+      return "\n";
+    case ("\\"):
+      return "\\";
+    case ("/"):
+      return "/";
+    case ("b"):
+      return "\b";
+    case ("r"):
+      return "\r";
+    case ("f"):
+      return "\f";
+    case ('"'):
+      return '"';
+    default:
+      return currentValue;
+  }
 }
 
 function parseContent() {
@@ -113,7 +146,7 @@ function processNextValue() {
       return parseArray();
     case /{/.test(currentValue):
       return parseObject();
-      case /['"]/.test(currentValue):
+      case /["]/.test(currentValue):
       return parseString();
       case /[0-9\.-]/.test(currentValue):
       return parseNumber();
@@ -133,13 +166,14 @@ function processNextValue() {
   }
 
 
-function test(value) {
-console.log("parseJSON (mine)");
-console.log(parseJSON(value));
+  function test(value) {
+    console.log("parseJSON (mine)");
+    console.log(parseJSON(value));
 
-console.log("JSON.parse (builtin)");
-console.log(JSON.parse(value));
+    console.log("JSON.parse (builtin)");
+    console.log(JSON.parse(value));
 
-console.log(_.isEqual(parseJSON(value), JSON.parse(value)));
+    console.log(_.isEqual(parseJSON(value), JSON.parse(value)));
 
-}
+  }
+
