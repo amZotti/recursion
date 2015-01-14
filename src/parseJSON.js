@@ -6,6 +6,8 @@
 function nextValue() {
   currentValue = source.charAt(index);
   index++;
+  if (index > (source.length) && currentValue === "")
+    throw SyntaxError();
   if (currentValue === "")
     return undefined;
 }
@@ -26,6 +28,8 @@ function parseArray() {
     findNextArrayValue();
   }
   endOfArray = false;
+   if (index > source.length)
+     throw SyntaxError();
   return arr;
 }
 
@@ -84,8 +88,10 @@ function parseNumber() {
     endOfArray = true;
   if (currentValue === "}")
     endOfObject = true;
-  if (/\./.test(str))
+  if (/\./.test(str)) {
+    index--;
     return parseFloat(str);
+  }
   else
     return parseInt(str);
 }
@@ -134,16 +140,16 @@ function parseSpecialCharacter() {
 function parseContent() {
   switch (currentValue) {
     case ("u"):
-      index += 9;
+      index += 8;
       return undefined;
     case ("n"):
-      index += 4;
+      index += 3;
       return null;
     case ("t"):
-      index += 4;
+      index += 3;
       return true;
     case ("f"):
-      index += 5;
+      index += 4;
       return false;
     default:
       //Syntax error
@@ -188,4 +194,4 @@ function processNextValue() {
     console.log(_.isEqual(parseJSON(value), JSON.parse(value)));
 
   }
-
+str = '[1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999]';
