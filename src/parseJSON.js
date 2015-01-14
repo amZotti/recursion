@@ -7,7 +7,7 @@ function nextValue() {
   currentValue = source.charAt(index);
   index++;
   if (currentValue === "")
-  return undefined;
+    return undefined;
 }
 
 function removeWhiteSpace() {
@@ -43,10 +43,11 @@ function findNextObjectValue() {
     endOfObject = true;
   if (currentValue === ":" || currentValue === ",")
     nextValue();
-  if (/[\t\n\r]/.test(currentValue)) {
-    nextValue();
+  while(/[\t\n\r]/.test(currentValue)) {
     nextValue();
   }
+  if (currentValue === "}" || currentValue === "")
+    endOfObject = true;
   removeWhiteSpace();
 }
 
@@ -55,13 +56,15 @@ function parseObject() {
   nextValue();
   while (currentValue !== "}" && currentValue !== "") {
     findNextObjectValue();
-    if (!endOfObject) {
-    key = parseString(currentValue);
-    nextValue();
     findNextObjectValue();
-    value = processNextValue(currentValue);
-    obj[key] = value;
-    nextValue();
+    if (!endOfObject) {
+      key = parseString(currentValue);
+      nextValue();
+      findNextObjectValue();
+      findNextObjectValue();
+      value = processNextValue(currentValue);
+      obj[key] = value;
+      nextValue();
     }
     else  {
       endOfObject = false;
@@ -100,9 +103,9 @@ function parseString() {
     else {
       str += currentValue;
     }
-    nextValue();
-  }
-  return str;
+  nextValue();
+}
+return str;
 }
 
 function parseSpecialCharacter() {
@@ -175,7 +178,7 @@ function processNextValue() {
   }
 
 
-  function test(value) {
+  function myTest(value) {
     console.log("parseJSON (mine)");
     console.log(parseJSON(value));
 
@@ -186,6 +189,3 @@ function processNextValue() {
 
   }
 
-
-  Str3 = '{\r\n"glossary": {\n"title": "example glossary"}}';
-    console.log(parseJSON(Str3));
