@@ -9,7 +9,6 @@ describe('stringifyJSON', function(){
     });
 
     unstringifiableValues.forEach(function(obj){
-      console.log(obj);
       var expected = JSON.stringify(obj);
       var result = stringifyJSON(obj);
       expect(result).to.equal(expected);

@@ -182,16 +182,3 @@ function processNextValue() {
     nextValue();
     return processNextValue();
   }
-
-
-  function myTest(value) {
-    console.log("parseJSON (mine)");
-    console.log(parseJSON(value));
-
-    console.log("JSON.parse (builtin)");
-    console.log(JSON.parse(value));
-
-    console.log(_.isEqual(parseJSON(value), JSON.parse(value)));
-
-  }
-str = '[1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999]';
