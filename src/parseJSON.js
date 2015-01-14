@@ -43,6 +43,10 @@ function findNextObjectValue() {
     endOfObject = true;
   if (currentValue === ":" || currentValue === ",")
     nextValue();
+  if (/[\t\n\r]/.test(currentValue)) {
+    nextValue();
+    nextValue();
+  }
   removeWhiteSpace();
 }
 
@@ -182,3 +186,6 @@ function processNextValue() {
 
   }
 
+
+  Str3 = '{\r\n"glossary": {\n"title": "example glossary"}}';
+    console.log(parseJSON(Str3));
