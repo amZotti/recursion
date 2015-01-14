@@ -86,7 +86,8 @@ function parseNumber() {
 
 function parseString() {
   var str = "";
-  nextValue();
+  if (currentValue === "'" || currentValue === '"')
+    nextValue();
   while (!/["]/.test(currentValue)) {
     if (currentValue === "\\") {
       nextValue();
